@@ -22,12 +22,11 @@ def read_image(tf_bytestring):
     return image
   
 def load_dataset(image_file, label_file):
-    imagedataset = tf.data.FixedLengthRecordDataset(image_file, 28*28, header_bytes=16)
-    imagedataset = imagedataset.map(read_image, num_parallel_calls=AUTO)
-    labelsdataset = tf.data.FixedLengthRecordDataset(label_file, 1, header_bytes=8)
-    labelsdataset = labelsdataset.map(read_label, num_parallel_calls=AUTO)
-    dataset = tf.data.Dataset.zip((imagedataset, labelsdataset))
-    return dataset 
+  imagedataset = tf.data.FixedLengthRecordDataset(image_file, 28*28, header_bytes=16)
+  imagedataset = imagedataset.map(read_image, num_parallel_calls=AUTO)
+  labelsdataset = tf.data.FixedLengthRecordDataset(label_file, 1, header_bytes=8)
+  labelsdataset = labelsdataset.map(read_label, num_parallel_calls=AUTO)
+  return tf.data.Dataset.zip((imagedataset, labelsdataset)) 
   
 def get_training_dataset(image_file, label_file, batch_size):
     dataset = load_dataset(image_file, label_file)
